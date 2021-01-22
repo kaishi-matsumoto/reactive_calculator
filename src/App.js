@@ -1,73 +1,64 @@
 import React, { useState } from 'react';
+import styled from 'styled-components'
 function App(){
-  /* const [rightSide,setRightSide] = useState([0])
-  const [leftSide, setLeftSide] = useState([0]) */
- /*  const [operator, setOperator] = useState('+') */
+ 
   const [result, setResult] = useState([0])
   
-  const rightSide = [[0]]
-  const leftSide = [[0]]
-  /* for(let i=0; i<100; i++){
-    rightSide.push(i)
-    i++
-    return rightSide
-  } */
+  const rightSide = [...Array(100).keys()]
+  const leftSide = [...Array(100).keys()]
 
-  
-  const calculateNumber =()=>{
+  const calculateNumber =(e)=>{
 
+    const rightNumber = parseFloat(e.currentTarget.right.value, 10)
+    const leftNumber = parseFloat(e.currentTarget.left.value, 10)
+    const operator = JSON.stringify(e.currentTarget.operator.value)
+    
+    if( operator ===  JSON.stringify("+")){
+      setResult(rightNumber + leftNumber)
+      console.log(result)
+    }else if( operator ===  JSON.stringify("-")){
+      setResult(rightNumber - leftNumber)
+    }else if( operator ===  JSON.stringify("*")){
+      setResult(rightNumber * leftNumber)
+    }else if( operator ===  JSON.stringify("/")){
+      setResult(rightNumber / leftNumber)
+    }
+
+    if(leftNumber === 0  &&  operator ===  JSON.stringify("/") && rightNumber !== 0){
+      setResult('0で割っちゃダメ')
+    }
+    
   }
 
-  return <div>
-    <select onChange={(e)=>calculateNumber(e)}>
-     {rightSide.push((number)=>{
-       for(let i=0; i<100; i++){
-        number.push(i)
-        i++
+  return <Form  onChange={(e)=>calculateNumber(e)}>
+    <select name='right'>
+     {rightSide.map((number)=>{
         return <option>{number}</option>
-       }
      })}
-      
     </select>
 
-    <select>
+    <select name='operator'>
       <option>+</option>
       <option>-</option>
       <option>*</option>
       <option>/</option>
     </select>
       
-    <select onChange={(e)=>calculateNumber(e)}>
-      <option>{leftSide}</option>
+    <select name='left'>
+     {leftSide.map((number)=>{
+        return <option>{number}</option>
+     })}
+      
     </select>
+
     <div>=</div>
+
     <form>{result}</form>
-  </div>
+  </Form>
 }
 
+const Form = styled.form`
+  float: left;
+`
+
 export default App;
-
-//リアクティブ計算機
-
-
-//必要なstate
-  //結果を格納するresult
-
-//三つのform(select系)と、=(ただの=)の作成
-//select1
-  //デフォルト値:0
-  //optionで1~100のうち一つを選択
-    //最初から1~100を配列として代入しておく
-      //pushで配列の末尾に現在の値に1を足したものを追加し、それを100回繰り返す
-      //上記をmapでoptionとして描画する
-
-  
-//select2
-  //デフォルト値:+
-　//optionで演算子全てのうち一つを選択
-
-//select3
-  //デフォルト値:0
-  //optionで表示するが、数が多いのでwhile文とかで繰り返す
-
-//onChangeでselect2で演算子が選ばれた瞬間演算し、結果をresultに格納
