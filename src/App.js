@@ -2,95 +2,53 @@ import React, { useState } from 'react';
 import styled from 'styled-components'
 function App(){
  
-  const [result, setResult] = useState(0)
+  
   const [rightNumber, setRightNumber] = useState(0)
   const [leftNumber, setLeftNumber] = useState(0)
   const [operator, setOperator] = useState('+')
-  const [calculated, setCalculated] = useState(false)
-
+  
   const rightSide = [...Array(100).keys()]
   const leftSide = [...Array(100).keys()]
 
+  const addition = operator ===  "+" ? rightNumber + leftNumber : undefined
+  const subtraction = operator ===  "-" ? rightNumber - leftNumber : undefined
+  const multiplication = operator ===  "*" ? rightNumber * leftNumber : undefined
+  const division = operator ===  "/" && leftNumber !== 0 ? rightNumber / leftNumber : undefined
+  const infinity = leftNumber === 0  &&  operator ===  "/" && rightNumber !== 0 ? '0で割っちゃダメ' : undefined
 
-  
-  const calculateNumber =(e)=>{
-    console.log(rightNumber)
+  return <React.Fragment>
+    <form >
+      <select onChange={(e)=>setRightNumber(parseFloat(e.currentTarget.value, 10))}  value={rightNumber} >
+        {rightSide.map((number,i)=>{
+            return <option value={i}>{number}</option>
+        })}
+      </select>
 
-    if(rightNumber === 0 && leftNumber === 0){
-      setResult(0)
-    }
-
-    if( operator ===  "+" ){
-      setResult(rightNumber + leftNumber)
-     /*  console.log(result) */
-    }else if( operator ===  "-"){
-      setResult(rightNumber - leftNumber)
-    }else if( operator ===  "*"){
-      setResult(rightNumber * leftNumber)
-    }else if( operator ===  "/"){
-      setResult(rightNumber / leftNumber)
-    }
-
-    if(leftNumber === 0  &&  operator ===  "/" && rightNumber !== 0){
-      setResult('0で割っちゃダメ')
-    }
-    
-  }
-
-  return <form onChange={(e)=>calculateNumber(e)}>
-    <select onChange={(e)=>setRightNumber(parseFloat(e.currentTarget.value, 10))} name='right' value={rightNumber} >
-      {console.log(rightNumber)}
-      {rightSide.map((number,i)=>{
-          return <option value={i}>{number}</option>
-          
-      })}
-    </select>
-
-    <select onChange={(e)=>setOperator(e.currentTarget.value)} name='operate' value={operator}>
- {/*      {console.log(operator)} */}
-      <option value='+'>+</option>
-      <option value='-'>-</option>
-      <option value='*'>*</option>
-      <option value='/'>/</option>
-    </select>
-      
-    <select onChange={(e)=>setLeftNumber(parseFloat(e.currentTarget.value, 10))} name='left' value={leftNumber}>
-    {/*   {console.log(leftNumber)} */}
-      {leftSide.map((number,i)=>{
-          return <option value={i}>{number}</option>
-      })}
+      <select onChange={(e)=>setOperator(e.currentTarget.value)} value={operator}>
+        <option value='+'>+</option>
+        <option value='-'>-</option>
+        <option value='*'>*</option>
+        <option value='/'>/</option>
+      </select>
         
-    </select>
+      <select onChange={(e)=>setLeftNumber(parseFloat(e.currentTarget.value, 10))} value={leftNumber}>
+        {leftSide.map((number,i)=>{
+            return <option value={i}>{number}</option>
+        })}
+          
+      </select>
 
-    <div>=</div>
+      <div>=</div>
 
-    <form value={result}>{result}</form>
-  </form>
+      {addition && <p>{addition}</p>}
+      {subtraction && <p>{subtraction}</p> }
+      {multiplication && <p>{multiplication}</p>}
+      {division && <p>{division}</p>}
+      {infinity && <p>{infinity}</p>}
+     </form>
+
+  </React.Fragment>
 }
-/* 
-const Form = styled.form`
-  float: left;
-` */
+
 
 export default App;
-
-
-//Appコンポーネント
-  //state定義
-    //rightSide:初期値1~100の数字
-    //leftSide:初期値1~100の数字
-    //result:初期値空の配列
-
-  //calculateNumber
-    //初期値同志
-  //end
-  
-  //render開始
-    //selectを選択→onChangeで選んだ値を格納
-
-    //onChangeで格納された値をcalculateNumberで計算し、resultを更新
-    
-
-  //end
-//export
-
